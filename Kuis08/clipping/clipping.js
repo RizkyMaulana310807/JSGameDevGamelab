@@ -1,7 +1,5 @@
 var canvas = document.getElementById("GL_Canvas");
-
 var ctx = canvas.getContext('2d');
-
 var radRect = ctx.createLinearGradient(0, -350, 0, 350);
 radRect.addColorStop(0.5, '#232256');
 radRect.addColorStop(1, '#143778');
@@ -13,8 +11,8 @@ radTriangle.addColorStop(1, '#ffcf75');
 ctx.fillStyle = radTriangle;
 
 ctx.beginPath();
-ctx.moveTo(canvas.width / 2, 0);
-ctx.lineTo(canvas.width / 2, 0);
+ctx.moveTo(canvas.width / 1, 255);
+ctx.lineTo(canvas.width / 1, -255);
 ctx.lineTo(0, 480);
 ctx.closePath();
 ctx.fill();
