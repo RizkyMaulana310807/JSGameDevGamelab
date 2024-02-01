@@ -3,6 +3,7 @@ var ctx = canvas.getContext('2d');
 var radRect = ctx.createLinearGradient(0, -350, 0, 350);
 radRect.addColorStop(0.5, '#232256');
 radRect.addColorStop(1, '#143778');
+ctx.fillStyle = radRect;
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 var radTriangle = ctx.createLinearGradient(0, 255, 0, 350);
