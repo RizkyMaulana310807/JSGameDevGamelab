@@ -232,3 +232,38 @@ function drawStar(ctx, r){
     ctx.fill();
     ctx.restore();
 }
+
+
+
+
+
+
+var canvas = document.getElementById("canvas_baru");
+var ctxBaru = canvas.getContext("2d");
+
+ctxBaru.rotate((Math.PI / 180) *  45);
+ctxBaru.fillStyle = "orange";
+ctxBaru.fillRect(450, 0, 100, 100);
+
+ctxBaru.setTransform(1, 0, 0, 1, 0, 0);
+
+
+ctxBaru.fillStyle = "white";
+ctxBaru.fillRect(240, 280, 155, 100);
+
+
+ctxBaru.fillStyle = "orange";
+ctxBaru.beginPath();
+ctxBaru.moveTo(245, 385);
+ctxBaru.lineTo(270, 275);
+ctxBaru.lineTo(270, 410);
+ctxBaru.closePath();
+ctxBaru.fill();
+
+
+ctxBaru.beginPath();
+ctxBaru.moveTo(365, 380);
+ctxBaru.lineTo(360, 275);
+ctxBaru.lineTo(390, 387);
+ctxBaru.closePath();
+ctxBaru.fill();
