@@ -1,6 +1,7 @@
 var canvas = document.getElementById('GL_Canvas');
 var ctx = canvas.getContext('2d');
 var playerScores;
+
 var triangle = {
     color : 'blue',
     atasX : 50, atasY : 675,
@@ -77,7 +78,7 @@ triangle.draw();
 
 
 
-window.addEventListener('keydown', (e)=>{
+window.addEventListener('keydown', (e)=>{       
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     if(e.key === 'ArrowRight'){
         console.log(`Menekan tombol "${e.key}" berhasil`);
@@ -111,10 +112,6 @@ window.addEventListener('keydown', (e)=>{
             ctx.fill();
         }
     };
-    function shootBullet(xTriang, yTriang){
-        bullet.x = xTriang;
-        bullet.y = yTriang;
-    }
     
     if(triangle.kiriX <= 0 || triangle.kananX > canvas.width){
         console.log("Kamu melewati batas canvas");
@@ -128,10 +125,19 @@ window.addEventListener('keydown', (e)=>{
         warningScreen.display();
     }
     // console.log(e.key);
-    if(e.key === ' '){
-        console.log(`Berhasil menekan tombol "${e.key}" berhasil`);
-        var shooting = new shootBullet(triangle.atasX, triangle.atasY);
+    function shootingBullet(){
+        bullet.y -= 10;
         bullet.draw();
+    }
+    if(e.key === ' '){
+        console.log(`Berhasil menekan tombol "${e.key}" berhasil`);  
+        bullet.draw();
+        var shooting = true;
+        if(shooting){
+            // for(let i = 0; i < 100; i++){
+            //     setInterval(, 1000 / 60);
+            // } 
+        }
     }
     // let keyb = e.key;
     // console.log(keyb);
