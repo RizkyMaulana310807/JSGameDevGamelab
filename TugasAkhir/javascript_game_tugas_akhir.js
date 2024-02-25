@@ -1,6 +1,68 @@
 var canvas = document.getElementById('GL_Canvas');
 var ctx = canvas.getContext('2d');
 var playerScores;
+var menu = false;
+
+
+
+function drawShape(){
+    triangle.draw();
+    pentagon.draw();
+    scores.display();
+}
+
+var rectangle = {
+    width : 245,
+    height : 80,
+    x : 0,
+    y : 0,
+    xAxis : function(canvasWidth){
+        return (canvasWidth - this.width) / 2;
+    },
+    yAxis : function(canvasHeight){
+        return (canvasHeight - this.height) / 2;
+    },
+    color : 'blue',
+    draw : function(){
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        this.x = this.xAxis(canvas.width);
+        this.y = this.yAxis(canvas.height);
+        ctx.fillStyle = this.color;
+        console.log(this.x); //389.5
+        console.log(this.y); //344
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+        
+    }
+}
+
+canvas.addEventListener('click', function(event){
+    var mouseX = event.clientX - canvas.getBoundingClientRect().left;
+    var mouseY = event.clientY - canvas.getBoundingClientRect().top;
+
+    if(mouseX >= 389.5 && mouseX <= 389.5 + rectangle.width && mouseY >= 344 && mouseY <= 344 + rectangle.height){
+        alert('Rectangle clicked')
+    }
+})
+
+var title = {
+    conten : 'Mulai',
+    font : '50px fantasy',
+    color : 'black',
+    draw : function(){
+        ctx.font = this.font;
+        ctx.fillStyle = this.color;
+        ctx.textAlign = 'center';
+        ctx.fillText(this.conten, canvas.width / 2, canvas.height / 2 + 20);
+    }
+}
+
+function startMenu(){
+    rectangle.draw();
+    title.draw();
+}
+if(menu == false){
+    startMenu();
+}
 
 var triangle = {
     color : 'blue',
@@ -9,7 +71,7 @@ var triangle = {
     kananX : 75, kananY : 750,
     vX : 5, vY : 5,
     draw : function(){
-        ctx.beginPath();
+    ctx.beginPath();
     ctx.moveTo(this.atasX, this.atasY); // Atas
     ctx.lineTo(this.kiriX, this.kiriY); // kiri
     ctx.lineTo(this.kananX, this.kananY); // kanan
@@ -28,21 +90,20 @@ var pentagon = {
     kiriBawahX : 855, kiriBawahY : 150,
     kiriAtasX : 820, kiriAtasY : 70,
     vXPenta : 5, vYPenta : 5,
+    velocity : 10,
     draw : function(){
-    ctx.beginPath();
-    ctx.moveTo(this.atasX, this.atasY); //atas
-    ctx.lineTo(this.kananAtasX, this.kananAtasY); //kanan atas
-    ctx.lineTo(this.kananBawahX, this.kananBawahY); //kanan bawah
-    ctx.lineTo(this.kiriBawahX, this.kiriBawahY) //kiri bawah
-    ctx.lineTo(this.kiriAtasX, this.kiriAtasY) //kiri atas
-    ctx.closePath();
-    // ctx.stroke();
-    ctx.fillStyle = this.colorPenta;
-    ctx.fill();
+        ctx.beginPath();
+        ctx.moveTo(this.atasX, this.atasY); //atas
+        ctx.lineTo(this.kananAtasX, this.kananAtasY); //kanan atas
+        ctx.lineTo(this.kananBawahX, this.kananBawahY); //kanan bawah
+        ctx.lineTo(this.kiriBawahX, this.kiriBawahY) //kiri bawah
+        ctx.lineTo(this.kiriAtasX, this.kiriAtasY) //kiri atas
+        ctx.closePath();
+        // ctx.stroke();
+        ctx.fillStyle = this.colorPenta;
+        ctx.fill();
     }
 };
-
-
 
 var scores = {
     text : "Scores : ",
@@ -67,11 +128,8 @@ var warningScreen = {
         ctx.fillText(this.text, this.x, this.y)
     }
 }
-ctx.fillStyle = 'blue';
-scores.display();
-// bullet.draw();
-pentagon.draw();
-triangle.draw();
+// ctx.fillStyle = 'blue';
+// drawAll();
 
 
 
@@ -85,34 +143,15 @@ window.addEventListener('keydown', (e)=>{
         triangle.atasX += triangle.vX;
         triangle.kananX += triangle.vX;
         triangle.kiriX += triangle.vX;
+        
     }
     if(e.key === 'ArrowLeft'){
         console.log(`Menekan tombol "${e.key}" berhasil`);
         triangle.atasX -= triangle.vX;
         triangle.kananX -= triangle.vX;
         triangle.kiriX -= triangle.vX;
+        
     }
-    ctx.fillStyle = 'blue';
-    scores.display();
-    // bullet.draw();
-    pentagon.draw();
-    triangle.draw();
-    var bullet = {
-        x : triangle.atasX,
-        y : triangle.atasY,
-        vx : 5,
-        vy : 5,
-        radius : 10,
-        colorArc : 'red',
-        draw : function(){
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
-            ctx.closePath();
-            ctx.fillStyle = this.colorArc;
-            ctx.fill();
-        }
-    };
-    
     if(triangle.kiriX <= 0 || triangle.kananX > canvas.width){
         console.log("Kamu melewati batas canvas");
         triangle.atasX = 50;
@@ -124,26 +163,22 @@ window.addEventListener('keydown', (e)=>{
         console.log("Kamu telah di teleportasi ke titik awal");
         warningScreen.display();
     }
-    // console.log(e.key);
-    function shootingBullet(){
-        bullet.y -= 10;
-        bullet.draw();
-    }
-    if(e.key === ' '){
-        console.log(`Berhasil menekan tombol "${e.key}" berhasil`);  
-        bullet.draw();
-        var shooting = true;
-        if(shooting){
-            // for(let i = 0; i < 100; i++){
-            //     setInterval(, 1000 / 60);
-            // } 
+    var bullet = {
+        x : triangle.atasX,
+        y : triangle.atasY,
+        vx : 5,
+        vy : 5,
+        radius : 10,
+        velocity : 10,
+        colorArc : 'red',
+        draw : function(){
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
+            ctx.closePath();
+            ctx.fillStyle = this.colorArc;
+            ctx.fill();
         }
-    }
-    // let keyb = e.key;
-    // console.log(keyb);
+    };
+    drawAll(); 
 });
-
-
-
-
 

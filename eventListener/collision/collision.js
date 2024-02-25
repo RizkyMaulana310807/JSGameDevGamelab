@@ -4,6 +4,7 @@ var square = {
     x: 200,
     y: 200,
     width: 90,
+    height : 90,
     color: '#00ccff',
     draw: function(){
         ctx.fillStyle = this.color;
