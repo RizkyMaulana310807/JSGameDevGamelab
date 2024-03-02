@@ -14,7 +14,6 @@ img.src = 'Image/Image.jpg';
 img.onload = function() {
     widthImage = img.width;
     heightImage = img.height;
-
     drawPanorama();
 }
 

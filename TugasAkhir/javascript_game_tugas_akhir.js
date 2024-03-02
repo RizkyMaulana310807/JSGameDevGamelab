@@ -1,11 +1,17 @@
 var canvas = document.getElementById('GL_Canvas');
 var ctx = canvas.getContext('2d');
 var playerScores;
-var viewPlayer = 'Credit Display';
+var viewPlayer = 'Menu Display';
+var _BossHP = 15000;
+var _PlayerHP = 5000;
 
-
-
-
+if(viewPlayer == "Menu Display"){
+    menu()
+} else if(viewPlayer == "Gameplay Display"){
+    gameplay();
+} else if(viewPlayer == "Credit Display"){
+    credit();
+}
 
 function menu(){
     var rectangle = {
@@ -26,11 +32,36 @@ function menu(){
             this.y = this.yAxis(canvas.height);
             ctx.fillStyle = this.color;
             ctx.fillRect(this.x, this.y, this.width, this.height);
+            console.log("X : " + this.x);
+            console.log("Y : " + this.y);
+            console.log("Width : " + this.width);
+            console.log("Height : " + this.height);
+        }
+    };
+    var outerRect = {
+        width : 246,
+        height : 81,
+        x : 0,
+        y : 0,
+        xAxis : function(canvasWidth){
+            return (canvasWidth - this.width) / 2;
+        },
+        yAxis : function(canvasHeight){
+            return (canvasHeight - this.height) / 2;
+        },
+        color : 'yellow',
+        draw : function(){
+            // ctx.clearRect(0, 0, canvas.width, canvas.height);
+            this.x = this.xAxis(canvas.width);
+            this.y = this.yAxis(canvas.height);
+            ctx.strokeStyle = this.color;
+            ctx.lineWidth = 3;
+            ctx.strokeRect(this.x, this.y, this.width, this.height);
         }
     };
     var title = {
         conten : 'Simplefield Space Shooter',
-        font : '70px fantasy',
+        font : '70px Impact',
         color : 'white',
         draw : function(){
             ctx.font = this.font;
@@ -41,7 +72,7 @@ function menu(){
     } ;
 var text = {
         conten : 'Mulai',
-        font : '50px fantasy',
+        font : '50px Verdana',
         color : 'white',
         draw : function(){
             ctx.font = this.font;
@@ -51,7 +82,6 @@ var text = {
         }
     };
     
-
 var rectCredit = {
     width : 245,
     height : 80,
@@ -65,11 +95,9 @@ var rectCredit = {
     }
 }
 
-
-
 var creditText = {
     conten : 'Credit',
-    font : '50px fantasy',
+    font : '50px Fantas',
     color : 'white',
     draw : function(){
         ctx.font = this.font;
@@ -89,7 +117,7 @@ var rectSetting = {
 
 var textSetting = {
     conten : 'Setting',
-    font : '25px fantasy',
+    font : '25px Verdana',
     color : 'black',
     draw : function(){
         ctx.font = this.font;
@@ -110,6 +138,7 @@ var bgm = new Audio('audios/BGM-space-by-ManoTIger-Games.mp3');
     function startMenu(){
         // bgm.play();
         rectangle.draw();
+        // outerRect.draw();
         rectCredit.draw();
         rectSetting.draw();
         text.draw();
@@ -118,15 +147,13 @@ var bgm = new Audio('audios/BGM-space-by-ManoTIger-Games.mp3');
         textSetting.draw();
     }
     
-    
-    
     canvas.addEventListener('click', function(event){
         var mouseX = event.clientX - canvas.getBoundingClientRect().left;
         var mouseY = event.clientY - canvas.getBoundingClientRect().top;
-    
-        if(mouseX >= 389.5 && mouseX <= 389.5 + rectangle.width && mouseY >= 344 && mouseY <= 344 + rectangle.height){
-            viewPlayer = 'Gameplay Display';
-            console.log(viewPlayer);
+        
+        if(mouseX >= 389.5 && mouseX <= 389.5 + 245 && mouseY >= 344 && mouseY <= 344 + 80){
+            // viewPlayer = 'Gameplay Display';
+            console.log("Berhasil dijalankan");
         }
         if(mouseX >= 779 && mouseX <= 779 + rectCredit.width && mouseY >= 688 && mouseY <= 688 + rectCredit.height){
 
@@ -135,7 +162,13 @@ var bgm = new Audio('audios/BGM-space-by-ManoTIger-Games.mp3');
             viewPlayer = 'Credit Display';
             console.log(viewPlayer);
         }
-        
+        if(viewPlayer == "Menu Display"){
+            menu();
+        } else if(viewPlayer == "Gameplay Display"){
+            gameplay();
+        } else if(viewPlayer == "Credit Display"){
+            credit();
+        }
     });
     
     
@@ -143,11 +176,7 @@ var bgm = new Audio('audios/BGM-space-by-ManoTIger-Games.mp3');
 }
 
 function gameplay(){
-    function drawShape(){
-        triangle.draw();
-        pentagon.draw();
-        scores.display();
-    }
+    
     var triangle = {
         color : 'blue',
         atasX : 50, atasY : 675,
@@ -174,7 +203,7 @@ function gameplay(){
         kiriBawahX : 855, kiriBawahY : 150,
         kiriAtasX : 820, kiriAtasY : 70,
         vXPenta : 5, vYPenta : 5,
-        velocity : 10,
+        velocity : 5,
         draw : function(){
             ctx.beginPath();
             ctx.moveTo(this.atasX, this.atasY); //atas
@@ -186,14 +215,29 @@ function gameplay(){
             // ctx.stroke();
             ctx.fillStyle = this.colorPenta;
             ctx.fill();
+            this.atasY += this.velocity;
+            this.kananAtasY += this.velocity;
+            this.kananBawahY += this.velocity;
+            this.kiriBawahY += this.velocity;
+            this.kiriAtasY += this.velocity;
+            // console.log(this.atasY);
+            // console.log(this.kananAtasY);
+            // console.log(this.kananBawahY);
+            // console.log(this.kiriBawahY);
+            // console.log(this.kiriAtasY);
+            // console.log(this.kananBawahY + this.kiriBawahY);
+            if((this.kananBawahY + this.kiriBawahY) > 1520 || this.atasY < 0){
+                this.velocity = -this.velocity;
+            }
+
         }
     };
     
     var scores = {
-        text : "Scores : ",
+        text : "Scores : 0",
         playerScore : playerScores,
-        x : 50, y : 50,
-        font : '25px arial',
+        x : 150, y : 50,
+        font : '25px Fantasy',
         color : 'blue',
         display : function(){
             ctx.font = this.font;
@@ -212,24 +256,53 @@ function gameplay(){
             ctx.fillText(this.text, this.x, this.y)
         }
     }
+    var bgGameplay = new Image();
+    bgGameplay.src = "images/sky-image-by-wallpaperaccess-com.webp";
+    function drawShape(){
+        ctx.drawImage(bgGameplay, 0, 0, canvas.width, canvas.height);
+        triangle.draw();
+        scores.display();
+    }
+
+    function drawEnemy(){
+        pentagon.draw();
+    }
     ctx.clearRect(0, 0 ,canvas.width, canvas.height);
-    drawShape();
-    window.addEventListener('keydown', (e)=>{       
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // drawShape();
+    setInterval(() => {
+        drawShape();
+    }, 40);
+setInterval(drawEnemy, 40);
+    window.addEventListener('keydown', (e)=>{ 
         if(e.key === 'ArrowRight'){
             console.log(`Menekan tombol "${e.key}" berhasil`);
             triangle.atasX += triangle.vX;
             triangle.kananX += triangle.vX;
             triangle.kiriX += triangle.vX;
             
-        }else if(e.key === 'ArrowLeft'){
+        }
+        if(e.key === 'ArrowLeft'){
             console.log(`Menekan tombol "${e.key}" berhasil`);
             triangle.atasX -= triangle.vX;
             triangle.kananX -= triangle.vX;
             triangle.kiriX -= triangle.vX;
             
-        }else if(triangle.kiriX <= 0 || triangle.kananX > canvas.width){
-            console.log("Kamu melewati batas canvas");
+        }
+        if(e.key === 'ArrowUp'){
+            console.log(`Menekan tombol "${e.key}" berhasil`);
+            triangle.atasY -= triangle.vY;
+            triangle.kananY -= triangle.vY;
+            triangle.kiriY -= triangle.vY;
+        }
+        if(e.key === 'ArrowDown'){
+            console.log(`Menekan tombol "${e.key}" berhasil`);
+            triangle.atasY += triangle.vY;
+            triangle.kananY += triangle.vY;
+            triangle.kiriY += triangle.vY;
+        }
+        // drawShape();
+        if(triangle.kiriX <= 0 || triangle.kananX > canvas.width){
+            //console.log("Kamu melewati batas canvas");
             triangle.atasX = 50;
             triangle.atasY = 675;
             triangle.kiriX = 25;
@@ -238,26 +311,11 @@ function gameplay(){
             triangle.kananY = 750;
             console.log("Kamu telah di teleportasi ke titik awal");
             warningScreen.display();
-        } else{
-            return false;
+        } 
+        if(e.key === " "){
+            //spasi di tekan
         }
-        var bullet = {
-            x : triangle.atasX,
-            y : triangle.atasY,
-            vx : 5,
-            vy : 5,
-            radius : 10,
-            velocity : 10,
-            colorArc : 'red',
-            draw : function(){
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
-                ctx.closePath();
-                ctx.fillStyle = this.colorArc;
-                ctx.fill();
-            }
-        };
-
+        
     }); 
 }
 
@@ -318,20 +376,20 @@ function credit(){
 
 }
 
-setInterval(() => {
-    switch(viewPlayer){
-        case 'Menu Display':
-            menu();
-            break;
-        case 'Gameplay Display':
-            gameplay();
-            break;
-        case 'Credit Display':
-            credit();
-            break;
-        default:
-            console.error("Eror code 404");
-            break;
-    }
-}, 500);
+// setInterval(() => {
+//     switch(viewPlayer){
+//         case 'Menu Display':
+//             menu();
+//             break;
+//         case 'Gameplay Display':
+//             gameplay();
+//             break;
+//         case 'Credit Display':
+//             credit();
+//             break;
+//         default:
+//             console.error("Eror code 404");
+//             break;
+//     }
+// }, 500);
 
