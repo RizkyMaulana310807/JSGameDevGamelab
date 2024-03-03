@@ -1,7 +1,7 @@
 var canvas = document.getElementById('GL_Canvas');
 var ctx = canvas.getContext('2d');
 var playerScores;
-var viewPlayer = 'Menu Display';
+var viewPlayer = 'Gameplay Display ';
 var _BossHP = 15000;
 var _PlayerHP = 5000;
 
@@ -272,7 +272,7 @@ function gameplay(){
     setInterval(() => {
         drawShape();
     }, 40);
-setInterval(drawEnemy, 40);
+    setInterval(drawEnemy, 40);
     window.addEventListener('keydown', (e)=>{ 
         if(e.key === 'ArrowRight'){
             console.log(`Menekan tombol "${e.key}" berhasil`);

@@ -7,10 +7,22 @@ canvas {
     left: 0;
     border: 1px solid black;
 }
-*{
-    padding: 0;
-    margin: 0;
+
+#setting_laye, #gameplay_bg{
+    display: none;
 }
-#setting_layer, #credit_layer, #gameplay_bg, #gameplay_player_enemy, #gameplay_hud{
+#menu_layer{
+    display: block;
+}
+#gameplay_player_enemy{
+    display: none;
+}
+#gameplay_hud{
+    display: none;
+}
+#game_over{
+    display: none;
+}
+#credit_layer{
     display: none;
 }
