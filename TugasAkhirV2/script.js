@@ -6,6 +6,9 @@ var laserShoot = new Audio();
 // laserShoot.src = 'audios/LASER GUN SOUND EFFECT - FREE.mp3';
 var explosionbullet = new Audio();
 explosionbullet.src = 'audios/Small Bomb Explosion Sound Effect (mp3cut.net).mp3';
+//BGM
+var backgroundSound = new Audio();
+backgroundSound.src ='audios/Galaxy Attack _ space shooter SoundTrack.mp3';
 // Layer BG
 var BGLayer = document.getElementById("BG_layer");
 var ctxBG = BGLayer.getContext("2d");
@@ -171,6 +174,11 @@ function drawAllObjectGameplay(){
     detectCollisionPlayer();
 }
 function menu_display(){
+    backgroundSound.play();
+    backgroundSound.onended = function(){
+        backgroundSound.currentTime = '0';
+        backgroundSound.play();
+    }
     timeOutMenu();
     menuLayer.addEventListener('click', function(e){
         var mouseX = e.clientX - menuLayer.getBoundingClientRect().left;
@@ -310,14 +318,13 @@ function detectCollision(){
     bulletsContainer.forEach(function(bullet) {
         let distance = Math.sqrt(Math.pow(bullet.x - enemy.x1, 2) + Math.pow(bullet.y - enemy.y1, 2));
         if (distance < bullet.radius + enemy.radius) {
-            // Tabrakan terdeteksi
             enemy.color = "red";
             explosionDetect();
+            explosionbullet.currentTime = 0;
             _BossHP -= 100;
             scores++;
             console.log(scores);
             console.log("tabrakan terdeteksi");
-            // Hapus peluru yang bertabrakan
             bulletsContainer = bulletsContainer.filter(function(b) {
                 return b !== bullet;
             });
@@ -426,6 +433,8 @@ function showCredit(){
     displayTitle('35px arial', 'white', 'center', 'Rizky Maulana', creditLayer.width / 2, 30, creditCtx);
     displayTitle('35px arial', 'white', 'center', 'background : MotionBackground', creditLayer.width / 2, 70, creditCtx);
     displayTitle('35px arial', 'white', 'center', 'sfx : Sound Effects & Sound Fx', creditLayer.width / 2, 110, creditCtx);
+    displayTitle('35px arial', 'white', 'center', 'Backsound :  ManoTigerGames', creditLayer.width / 2, 110, creditCtx);
+
     customRectStroke(0, 0, 200 + 15, 0 + 15, 150 + 15, 50 + 15, 0, 50 + 15, 'yellow', creditCtx);
     customRectangle(0, 0, 200, 0, 150, 50, 0, 50, 'red', creditCtx);
     displayTitle('35px impact', 'white', 'center', 'Back', 70, 40, creditCtx); 
