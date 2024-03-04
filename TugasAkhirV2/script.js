@@ -274,7 +274,7 @@ var directionPlayer = {
 }
 var player = {
     x1 : 50, y1 : 100, x2 : 150, y2 : 150, x3 : 50, y3 : 200,
-    color : 'green'
+    color : 'blue'
 };
 var enemy = {
     x1 : 900, y1 : 24, x2 : 1000, y2 : 70, x3 : 970, y3 : 150, x4 : 855, y4 : 150, x5 : 820, y5 : 70,
@@ -355,33 +355,37 @@ function detectCollisionPlayer() {
 }
 
 function gameplay_object(){
+
+    
     gameloop = setInterval(drawAllObjectGameplay, 40);
+
+    
     window.addEventListener('keydown', function(e){
         directionPlayer.testDirectionPlayer();
         if(e.key === 'ArrowUp' && directionPlayer.up){
-            player.y1 -= 5;
-            player.y2 -= 5;
-            player.y3 -= 5;
+            player.y1 -= 15;
+            player.y2 -= 15;
+            player.y3 -= 15;
         }
         if(e.key === 'ArrowDown' && directionPlayer.down){
-            player.y1 += 5;
-            player.y2 += 5;
-            player.y3 += 5;
+            player.y1 += 15;
+            player.y2 += 15;
+            player.y3 += 15;
         }
         if(e.key === 'ArrowRight' && directionPlayer.right){
-            player.x1 += 5;
-            player.x2 += 5;
-            player.x3 += 5;
+            player.x1 += 15;
+            player.x2 += 15;
+            player.x3 += 15;
         }
         if(e.key === 'ArrowLeft' && directionPlayer.left){
-            player.x1 -= 5;
-            player.x2 -= 5;
-            player.x3 -= 5;
+            player.x1 -= 15;
+            player.x2 -= 15;
+            player.x3 -= 15;
         }
         // console.log(`Menekan tombol "${e.key}" berhasil`);
         if(e.key === ' ' && isShooting){
             pushBullet();
-            
+            console.log(bulletsContainer);
             isShooting = false;
             if(!isShooting){
                 setTimeout(() => {
