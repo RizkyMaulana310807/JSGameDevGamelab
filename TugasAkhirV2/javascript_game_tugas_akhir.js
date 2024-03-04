@@ -7,7 +7,9 @@ var laserShoot = new Audio();
 var explosionbullet = new Audio();
 explosionbullet.src = 'audios/Small Bomb Explosion Sound Effect (mp3cut.net).mp3';
 //BGM
-
+var soundBGM = new Audio();
+soundBGM.src = 'audios/Galaxy.ogg';
+var bgmActive = false;
 // Layer BG
 var BGLayer = document.getElementById("BG_layer");
 var ctxBG = BGLayer.getContext("2d");
@@ -84,15 +86,20 @@ function timeOutMenu(){
     function showMenu1(){
         rectStroke((menuLayer.width - 200) / 2 + 15, (menuLayer.height -75) / 2 + 15, 200, 75, 'yellow', ctxMenu);
         customRectStroke(800 + 15, 24 + 15, 1000 + 15, 24 + 15, 950 + 15, 85 + 15, 750 + 15, 85 + 15, 'yellow', ctxMenu);
+    customRectStroke(700 - 15, 780 - 15, 1000 - 15, 768 - 15, 1024 - 15, 700 - 15, 750 - 15, 700 - 15, 'yellow', ctxMenu)
+
     }
     function showMenu2(){
         drawRectangle((menuLayer.width - 200) / 2, (menuLayer.height - 75) / 2, 200, 75, 'red', ctxMenu);
+    customRectangle(700, 780, 1000, 768, 1024, 700, 750, 700, 'red', ctxMenu);
         displayStrokeText('71px fantasy', 'yellow', 'center', 'Mulai', menuLayer.width / 2 + 5, menuLayer.height / 2 + 25, 1, ctxMenu);
         customRectangle(800, 24, 1000, 24, 950, 85, 750, 85, 'red', ctxMenu);
         displayStrokeText('45px impact', 'yellow', 'center', 'Credit', 875 + 5, 70 + 5, ctxMenu);
     }
     function showMenu3(){
         displayStrokeText('90px Impact', 'yellow', 'center', 'Space', menuLayer.width /  2 - 30, menuLayer.height / 4 - 30, 1, ctxMenu);    
+    displayTitle('70px impact', 'white', 'center', 'BGM', menuLayer.width - 150, menuLayer.height - 5, ctxMenu);
+
     }
     function showMenu4(){
         displayStrokeText('70px Impact', 'yellow', 'center', 'Shooter', menuLayer.width / 2 + 65, menuLayer.height / 4 + 30, 1, ctxMenu);
@@ -173,9 +180,6 @@ function drawAllObjectGameplay(){
     detectCollisionPlayer();
 }
 function menu_display(){
-    var soundBGM = new Audio();
-    soundBGM.src = 'audios/Space Junk Galaxy - Super Mario Galaxy.ogg';
-    soundBGM.play();
     timeOutMenu();
     menuLayer.addEventListener('click', function(e){
         var mouseX = e.clientX - menuLayer.getBoundingClientRect().left;
@@ -184,6 +188,13 @@ function menu_display(){
         if(mouseX >= 412 && mouseX <= 412 + 200 && mouseY >= 346.5 && mouseY <= 346.5 + 75){
             console.log("Fungsi Untuk Berpindah ke Layer Gameplay Seharusnya Sudah Berhasil");
             gameplay_object();
+            scores = 0;
+            player.x1 = 50;
+            player.y1 = 100;
+            player.x2 = 150;
+            player.y2 = 150;
+            player.x3 = 50;
+            player.y3 = 200;
             setTimeout(() => {
                 gameOverLayer.style.display = 'none';
                 menuLayer.style.display = 'none';
@@ -198,6 +209,21 @@ function menu_display(){
                 creditLayer.style.display = 'block';
                 
             }, 1000);
+        }
+        if((mouseX >= 700 && mouseX <= 1024) && (mouseY >= 700 && mouseY <= 768)){
+            console.log(bgmActive);
+            console.log("Fungsi Play BGM Seharusnya Sudah Berhasil");
+            if(!bgmActive){
+                bgmActive = true;
+                soundBGM.play();
+                soundBGM.onended = function(){
+                    soundBGM.currentTime = 0;
+                    soundBGM.play();
+                }
+            } else if(bgmActive){
+                bgmActive = false;
+                soundBGM.pause();
+            }
         }
     });
 
@@ -409,23 +435,23 @@ function showGameover(){
     gameOverCtx.clearRect(0, 0, gameOverLayer.width, gameOverLayer.height);
     displayTitle('100px impact', 'red', 'center', 'Game Over', gameOverLayer.width / 2, gameOverLayer.height / 2, gameOverCtx);
     displayTitle('50px arial', 'white', 'center', 'High Score : ' + scores, gameOverLayer.width / 2, gameOverLayer.height / 2 + 50, gameOverCtx);
-    // rectStroke(gameOverLayer.width / 2 - 100 + 15, gameOverLayer.height / 2 + 75 + 15, 200, 60, 'yellow', gameOverCtx);
-    // drawRectangle(gameOverLayer.width / 2 - 100, gameOverLayer.height / 2 + 75, 200, 60, 'red', gameOverCtx);
-    // displayTitle('50px arial', 'white', 'center', 'Menu', gameOverLayer.width / 2, gameOverLayer.height / 2 + 120, gameOverCtx);
-    // gameOverLayer.addEventListener('click', function(e){
-    //     var mouseX = e.clientX - menuLayer.getBoundingClientRect().left;
-    //     var mouseY = e.clientY - menuLayer.getBoundingClientRect().top;
+    rectStroke(gameOverLayer.width / 2 - 100 + 15, gameOverLayer.height / 2 + 75 + 15, 200, 60, 'yellow', gameOverCtx);
+    drawRectangle(gameOverLayer.width / 2 - 100, gameOverLayer.height / 2 + 75, 200, 60, 'red', gameOverCtx);
+    displayTitle('50px arial', 'white', 'center', 'Menu', gameOverLayer.width / 2, gameOverLayer.height / 2 + 120, gameOverCtx);
+    gameOverLayer.addEventListener('click', function(e){
+        var mouseX = e.clientX - menuLayer.getBoundingClientRect().left;
+        var mouseY = e.clientY - menuLayer.getBoundingClientRect().top;
         
-    //     if(mouseX >= gameOverLayer.width / 2 - 100 && mouseX <= gameOverLayer.width / 2 + 200 && mouseY >= gameOverLayer.height / 2 + 75 && mouseY <= gameOverLayer.height / 2 + 75 + 60){
-    //         console.log("Fungsi Untuk Berpindah ke Layer Menu Seharusnya Sudah Berhasil");
-    //         setTimeout(() => {
-    //             gameOverLayer.style.display = 'none';
-    //             gameHUD.style.display = 'none';
-    //             gameplayObject.style.display = 'none';
-    //             menuLayer.style.display = 'block'; 
-    //         }, 1000);
-    //     }
-    // })
+        if(mouseX >= gameOverLayer.width / 2 - 100 && mouseX <= gameOverLayer.width / 2 + 200 && mouseY >= gameOverLayer.height / 2 + 75 && mouseY <= gameOverLayer.height / 2 + 75 + 60){
+            console.log("Fungsi Untuk Berpindah ke Layer Menu Seharusnya Sudah Berhasil");
+            setTimeout(() => {
+                gameOverLayer.style.display = 'none';
+                gameHUD.style.display = 'none';
+                gameplayObject.style.display = 'none';
+                menuLayer.style.display = 'block'; 
+            }, 1000);
+        }
+    })
 }
 // showGameover();
 function showCredit(){
@@ -434,7 +460,7 @@ function showCredit(){
     displayTitle('35px arial', 'white', 'center', 'Rizky Maulana', creditLayer.width / 2, 30, creditCtx);
     displayTitle('35px arial', 'white', 'center', 'background : MotionBackground', creditLayer.width / 2, 70, creditCtx);
     displayTitle('35px arial', 'white', 'center', 'sfx : Sound Effects & Sound Fx', creditLayer.width / 2, 110, creditCtx);
-    displayTitle('35px arial', 'white', 'center', 'Backsound :  ManoTigerGames', creditLayer.width / 2, 150, creditCtx);
+    displayTitle('35px arial', 'white', 'center', 'Backsound :  Super Mario Galaxy', creditLayer.width / 2, 150, creditCtx);
 
     customRectStroke(0, 0, 200 + 15, 0 + 15, 150 + 15, 50 + 15, 0, 50 + 15, 'yellow', creditCtx);
     customRectangle(0, 0, 200, 0, 150, 50, 0, 50, 'red', creditCtx);
